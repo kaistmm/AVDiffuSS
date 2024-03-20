@@ -16,11 +16,18 @@ Our demo page is [here](https://mmai.io/projects/avdiffuss/).
 
 ## Pre-trained checkpoints
 
-- We provide pre-trained checkpoint for the model trained for 30 epochs on the VoxCeleb2 train dataset. It can be used for testing on both the VoxCeleb2 and LRS3 test datasets. The file can be downloaded [here](https://drive.google.com/file/d/15LXsP6yhLBfZTSO4YaE4KddNsoNV2Ny4/view?usp=sharing).
+- We provide pre-trained checkpoint for the model trained for 30 epochs on the VoxCeleb2 train dataset. It can be used for testing on both the VoxCeleb2 and LRS3 test datasets. The file can be downloaded [here](https://drive.google.com/file/d/1aE0_4W0KktabyFi4e6inQZiQsqWYgR_U/view?usp=sharing).
 
 Usage:
 - For evaluating the pre-trained checkpoint, use the `--testset` option of `test.py` (see section **Evaluation** below) for selecting the test dataset among VoxCeleb2 and LRS3. Use `--ckpt` option to specify the path of the checkpoint for `test.py`.
 
+## Training
+
+For training, run
+```bash
+python train.py 
+```
+It you don't want to save checkpoints, add --nolog option.
 
 ## Evaluation
 
