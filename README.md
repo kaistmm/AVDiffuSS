@@ -1,6 +1,6 @@
 # Seeing through the conversation: Audio-visual speech separation based on diffusion model (AVDiffuSS)
 
-<img src="https://github.com/cyongong/AVDiffuSS/assets/83945744/68a42129-9230-46f6-9258-5c7a8a7140f9" width="800" alt="AVDiffuSS architecture. A predictive model is first used to estimate the clean speech. The following generative stage then uses this estimate as the initial point for a reverse process. For both stages, visual streams are used to extract the target speaker's speech.">
+<img src="https://github.com/cyongong/AVDiffuSS_before/assets/83945744/68a42129-9230-46f6-9258-5c7a8a7140f9" width="800" alt="AVDiffuSS architecture. A predictive model is first used to estimate the clean speech. The following generative stage then uses this estimate as the initial point for a reverse process. For both stages, visual streams are used to extract the target speaker's speech.">
 
 
 This repository contains the official PyTorch implementation for the paper:
