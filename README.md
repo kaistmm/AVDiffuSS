@@ -42,7 +42,10 @@ If you want to evaluate whole audio, please run
 ```bash
 python test_whole.py --testset <'vox' or 'lrs3'> --ckpt /path/to/model/checkpoint --data_dir /path/to/test/data/directory
 ```
-The performance of the provided checkpoint evaluated by the first command is as follows:
+Inference speed could be faster by changing --hop_length option. Default value is 0.04 which is same with [VisualVoice](https://github.com/facebookresearch/VisualVoice). 
+
+
+The performance of the provided checkpoint evaluated by the first test command is as follows:
 
 | testset | PESQ | ESTOI | SI-SDR|
 |---------|------|-------|-------|
