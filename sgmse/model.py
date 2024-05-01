@@ -387,7 +387,7 @@ class StochasticRegenerationModel(pl.LightningModule):
                 sample = Y_denoised
 
             if return_stft:
-                return sample.squeeze(), Y.squeeze(), T_orig, norm_factor
+                return sample.squeeze(), Y_denoised.squeeze(), Y.squeeze(), T_orig, norm_factor
 
         x_hat = self.to_audio(sample.squeeze(), T_orig)
         x_hat = x_hat * norm_factor

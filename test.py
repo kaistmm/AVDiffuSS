@@ -89,14 +89,14 @@ def main():
     base_parser = ArgumentParser(add_help=False)
     parser = ArgumentParser()
     for parser_ in (base_parser, parser):
-        parser_.add_argument("--ckpt", type=str, default='./AVDiffuSS.ckpt')
+        parser_.add_argument("--ckpt", type=str, default='/mnt/bear2/users/syun/train_randomly_30epoch.ckpt')
         parser_.add_argument("--mode", type=str, default="storm")
         parser_.add_argument('--log_path', type=str, default='./test_result.txt')
         parser_.add_argument("--corrector", type=str, choices=("ald", "langevin", "none"), default="ald", help="Corrector class for the PC sampler.")
         parser_.add_argument("--corrector-steps", type=int, default=1, help="Number of corrector steps")
         parser_.add_argument("--snr", type=float, default=0.5, help="SNR value for (annealed) Langevin dynamics.")
         parser_.add_argument("--N", type=int, default=30, help="Number of reverse steps")
-        parser_.add_argument("--testset", default='vox', type=str, choices=['lrs3', 'vox'])
+        parser_.add_argument("--testset", default='lrs3', type=str, choices=['lrs3', 'vox'])
         parser_.add_argument("--data_dir", default='/mnt/datasets/voxcelebs/voxceleb2/', type=str, help='path of data directory corresponding to the testset choice')  # LRS3: /mnt/datasets/lip_reading/lrs3/ 
 
     args = parser.parse_args()
@@ -186,7 +186,7 @@ def main():
         for idx, visfeat in enumerate(visualFeatures):
             x = gt_list[idx]
             y = torch.Tensor(np.expand_dims(mix, 0)).cuda()
-            x_hat, _ = model.enhance(y, context = visfeat, corrector=args.corrector, corrector_steps=args.corrector_steps, snr=args.snr, N=args.N)
+            x_hat = model.enhance(y, context = visfeat, corrector=args.corrector, corrector_steps=args.corrector_steps, snr=args.snr, N=args.N)
             if x_hat.ndim == 1:
                 x_hat = x_hat.unsqueeze(0)
                 
