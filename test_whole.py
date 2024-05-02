@@ -19,6 +19,9 @@ import cv2
 import pickle
 import librosa
 import soundfile as sf
+import warnings
+
+warnings.filterwarnings(action='ignore')
 
 EPS_LOG = 1e-10
 sr = 16000

@@ -18,6 +18,9 @@ from pystoi import stoi
 import cv2
 import pickle
 import librosa
+import warnings
+
+warnings.filterwarnings(action='ignore')
 
 EPS_LOG = 1e-10
 
@@ -56,7 +59,7 @@ def load_audio_vox(file_path, max_len, sample_rate=16000):
     if audiosize < max_len:
         start_frame=0
         shortage = max_len - audiosize
-        min_len = sample_rate*30//25 # 최소 30프레임
+        min_len = sample_rate*30//25 
         if audiosize < min_len:
             #print(file_path + " is too short. Trying another video…")
             return None, 0

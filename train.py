@@ -19,6 +19,9 @@ from pytorch_lightning.callbacks import TQDMProgressBar, ModelCheckpoint
 
 import numpy as np
 import random
+import warnings
+
+warnings.filterwarnings(action='ignore')
 
 class CheckpointEveryNSteps(pl.Callback):
     """

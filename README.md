@@ -12,7 +12,8 @@ Our demo page is [here](https://mmai.io/projects/avdiffuss/).
 ## Installation
 
 - Create a new virtual environment with the following command. You should change the environment path in yaml file.
-- `conda env create -f AVDiffuSS.yaml`
+- `conda create -n AVDiffuSS python=3.8`
+- `pip install -r requirements.txt`
 
 ## Pre-trained checkpoints
 
