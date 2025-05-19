@@ -17,8 +17,8 @@ n_fft = 512
 hop_length = 128
 
 def evaluate_model(model, num_eval_files, spec=False, audio=False, discriminative=False):
-	if num_eval_files >50:
-		audio=False
+	if num_eval_files > 50:
+		audio = False
 		spec = False
 
 	model.eval()

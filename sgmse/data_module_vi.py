@@ -64,10 +64,9 @@ def mix_audio_snr(signal, noise, snr):
 
 class Specs(Dataset):
 	def __init__(
-		self, data_dir, subset, dummy, shuffle_spec, num_frames, format, use_snr,
-		audiovisual=True,
+		self, data_dir, subset, dummy, format, use_snr,
 		normalize_audio=True, spec_transform=None, stft_kwargs=None, spatial_channels=1, 
-		return_time=False, noise_weight=0.5,
+		return_time=False, noise_weight=0.5, audioset_dir=None,
 		**ignored_kwargs
 	):
 		self.data_dir = data_dir
@@ -75,7 +74,6 @@ class Specs(Dataset):
 		self.use_snr = use_snr
 		self.noise_weight=noise_weight
 		
-		self.audiovisual = audiovisual
 		self.format = format
 		self.spatial_channels = spatial_channels
 		self.return_time = return_time
@@ -83,52 +81,52 @@ class Specs(Dataset):
 		if subset == 'train':
 			self.dynamic_mixing = False
 			if self.format == 'voxceleb2_SS':
-				self.data_path = "/mnt/datasets/voxcelebs/voxceleb2/dev/wav/" #data_path
-				self.noise_path = "/mnt/datasets/voxcelebs/voxceleb2/dev/wav/"
+				self.data_path = os.path.join(self.data_dir, "dev/wav")
+				self.noise_path = os.path.join(self.data_dir, "dev/wav")
 				self.sample_num = len(glob(os.path.join(self.data_path, '*/*/*.wav')))
 				self.noise_list = np.random.choice(glob(os.path.join(self.noise_path,'*/*/*.wav')),self.sample_num)
 			elif self.format == 'voxceleb2_SE':
-				self.data_path = "/mnt/datasets/voxcelebs/voxceleb2/dev/wav/" #data_path
+				self.data_path = os.path.join(self.data_dir, "dev/wav")
 				self.sample_num = len(glob(os.path.join(self.data_path, '*/*/*.wav')))
-				self.noise_path = "/mnt/lynx1/datasets/audioset/unbalanced_train_segments/audio_mono"
+				self.noise_path = os.path.join(audioset_dir, "unbalanced_train_segments/audio_mono")
 				with open('audioset_train.txt') as f:
 					noise_list = f.readlines()
 					noise_list = [os.path.join(self.noise_path, filename.strip()) for filename in noise_list]
 				self.noise_list = np.random.choice(noise_list,self.sample_num)
 			elif format == 'voxceleb2_SES':
-				self.data_path = "/mnt/datasets/voxcelebs/voxceleb2/dev/wav/" #data_path
-				self.noise_path = "/mnt/datasets/voxcelebs/voxceleb2/dev/wav/"
+				self.data_path = os.path.join(self.data_dir, "dev/wav")
+				self.noise_path = os.path.join(self.data_dir, "dev/wav")
 				self.sample_num = len(glob(os.path.join(self.data_path, '*/*/*.wav')))
 				self.dynamic_mixing = False
 				self.noise_list = glob(os.path.join(self.noise_path,'*/*/*.wav')) if self.dynamic_mixing else np.random.choice(glob(os.path.join(self.noise_path,'*/*/*.wav')),self.sample_num)
-				self.noise_path2 = "/mnt/lynx1/datasets/audioset/unbalanced_train_segments/audio_mono"
-				with open('/mnt/bear2/users/syun/audioset_train.txt') as f:
+				self.noise_path2 = os.path.join(audioset_dir, "unbalanced_train_segments/audio_mono")
+				with open('audioset_train.txt') as f:
 					noise_list2 = f.readlines()
 					noise_list2 = [os.path.join(self.noise_path2, filename.strip()) for filename in noise_list2]
 				self.noise_list2 = np.random.choice(noise_list2,self.sample_num)
 		else:
 			self.dynamic_mixing = False
 			if self.format == 'voxceleb2_SS':
-				self.data_path = "/mnt/datasets/voxcelebs/voxceleb2/test/wav/"
-				self.noise_path = "/mnt/datasets/voxcelebs/voxceleb2/test/wav/"
-				self.sample_num = 5000 #2000
+				self.data_path = os.path.join(self.data_dir, "test/wav")
+				self.noise_path = os.path.join(self.data_dir, "test/wav")
+				self.sample_num = 5000 
 				self.noise_list = sorted(glob(os.path.join(self.noise_path,'*/*/*.wav')))[:self.sample_num]
 			elif self.format == 'voxceleb2_SE':
-				self.data_path = "/mnt/datasets/voxcelebs/voxceleb2/test/wav/"
-				self.noise_path = "/mnt/lynx1/datasets/audioset/eval_segments/audio_mono/audio"
+				self.data_path = os.path.join(self.data_dir, "test/wav")
+				self.noise_path = os.path.join(audioset_dir, "eval_segments/audio_mono/audio")
 				self.sample_num = 1000 
 				with open('audioset_test.txt') as f:
 					noise_list = f.readlines()
 					noise_list = [os.path.join(self.noise_path, filename.strip()) for filename in noise_list]
 				self.noise_list = noise_list[:self.sample_num]
 			elif format == 'voxceleb2_SES':
-				self.data_path = "/mnt/datasets/voxcelebs/voxceleb2/test/wav/"
-				self.noise_path = "/mnt/datasets/voxcelebs/voxceleb2/test/wav/"
-				self.sample_num = 5000 #2000
+				self.data_path = os.path.join(self.data_dir, "test/wav")
+				self.noise_path = os.path.join(self.data_dir, "test/wav")
+				self.sample_num = 5000 
 				self.dynamic_mixing = False
 				self.noise_list = sorted(glob(os.path.join(self.noise_path,'*/*/*.wav')))[:self.sample_num] if self.dynamic_mixing else np.random.choice(glob(os.path.join(self.noise_path,'*/*/*.wav')),self.sample_num)
-				self.noise_path2 = "/mnt/lynx1/datasets/audioset/eval_segments/audio_mono/audio"
-				with open('/mnt/bear2/users/syun/audioset_test.txt') as f:
+				self.noise_path2 = os.path.join(audioset_dir, "eval_segments/audio_mono/audio")
+				with open('audioset_test.txt') as f:
 					noise_list2 = f.readlines()
 					noise_list2 = [os.path.join(self.noise_path2, filename.strip()) for filename in noise_list2]
 				self.noise_list2 = noise_list2[:self.sample_num]
@@ -136,14 +134,10 @@ class Specs(Dataset):
 		self.chunk_size = int(16000 * 2.04) #chunk_size
 
 		if 'voxceleb2' in self.format:			
-			self.vid_table = self.vid_table_generator(self.data_path)
-			self.sample_list = self.sample_generator_fromvid(self.sample_num)
-
-
+			self.vid_table = self.vid_table_generator()
+			self.sample_list = self.sample_generator_fromvid()
 
 		self.dummy = dummy
-		self.num_frames = num_frames
-		self.shuffle_spec = shuffle_spec
 		self.normalize_audio = False #normalize_audio
 		self.spec_transform = spec_transform
 
@@ -152,13 +146,13 @@ class Specs(Dataset):
 		self.hop_length = self.stft_kwargs["hop_length"]
 		assert self.stft_kwargs.get("center", None) == True, "'center' must be True for current implementation"
 
-	def _open_hdf5(self):
-		self.meta_data = json.load(open(sorted(glob(join(self.data_dir, f"*.json")))[-1], "r"))
-		self.prep_file = h5py.File(sorted(glob(join(self.data_dir, f"*.hdf5")))[-1], 'r')
+	# def _open_hdf5(self):
+	# 	self.meta_data = json.load(open(sorted(glob(join(self.data_dir, f"*.json")))[-1], "r"))
+	# 	self.prep_file = h5py.File(sorted(glob(join(self.data_dir, f"*.hdf5")))[-1], 'r')
 
 	
 
-	def vid_table_generator(self,data_path):
+	def vid_table_generator(self):
 		id_list = os.listdir(self.data_path)
 		vid_table = {}
 		vid_list = {}
@@ -168,16 +162,16 @@ class Specs(Dataset):
 			for vid in vid_list:
 				vid_table[vid]= glob(os.path.join(self.data_path,id,vid,"*.wav"))
 				if len(vid_table[vid])==0:
-					raise ValueError(os.path.join(data_path, id, vid), os.listdir(os.path.join(data_path,id,vid)))
+					raise ValueError(os.path.join(self.data_path, id, vid), os.listdir(os.path.join(self.data_path,id,vid)))
 
 		return vid_table
 
 
-	def sample_generator_fromvid(self, sample_num):
+	def sample_generator_fromvid(self):
 		sample_list = []
 
-		replace = (sample_num >= len(self.vid_table))
-		selected_vids = np.random.choice(list(self.vid_table.keys()), sample_num, replace=replace)
+		replace = (self.sample_num >= len(self.vid_table))
+		selected_vids = np.random.choice(list(self.vid_table.keys()), self.sample_num, replace=replace)
 		
 		for vid in selected_vids:
 			sample_list.append(np.random.choice(self.vid_table[vid], 1)[0])
@@ -205,9 +199,7 @@ class Specs(Dataset):
 					frames.append(img)
 				else:
 					if i-vid_start<30:
-						##(path, " has less than 30 frames. Getting other video...")
 						return None
-					##(path, " doesn't have enough frames. Remaining", 51-i, "frames are padded with 'wrap' mode")
 					frames = np.array(frames)
 					
 					if for_sync:
@@ -220,7 +212,6 @@ class Specs(Dataset):
 			frames = np.array(frames)
 			return frames # (51, H, W, C if exists)
 		else:
-			##(path, " is not opened. Getting other video…")
 			return None
 
 
@@ -273,7 +264,6 @@ class Specs(Dataset):
 			selected_noise = np.random.choice(self.noise_list,1)[0] if self.dynamic_mixing else self.noise_list[i]
 			noise, _ = self.load_audio_vox(selected_noise)
 			while noise is None or (selected_noise == self.sample_list[i]):
-				#print(f"selected noise is wrong… (TroubleMaker) noise was None: {noise is None}, selected same utterance: {selected_noise == self.sample_list[i]}")
 				noise_idx += 1
 				if noise_idx > self.sample_num:
 					noise_idx = 0
@@ -285,7 +275,6 @@ class Specs(Dataset):
 				selected_noise2 = np.random.choice(self.noise_list2,1)[0] if self.dynamic_mixing else self.noise_list2[i]
 				noise2, _ = self.load_audio_vox(selected_noise2)
 				while noise2 is None:
-					#print(f"selected noise is wrong… (TroubleMaker) noise was None: {noise is None}, selected same utterance: {selected_noise == self.sample_list[i]}")
 					noise_idx2 += 1
 					if noise_idx2 > self.sample_num:
 						noise_idx = 0
@@ -361,10 +350,8 @@ class Specs(Dataset):
 
 		X, Y = self.spec_transform(X), self.spec_transform(Y)
 
-		if self.audiovisual:
-			return X, Y, torch.Tensor(visualFeatures)
-		else:
-			return X, Y
+		return X, Y, torch.Tensor(visualFeatures)
+
 
 	def __len__(self):
 		if self.dummy:
@@ -378,10 +365,10 @@ class Specs(Dataset):
 
 class SpecsDataModule(pl.LightningDataModule):
 	def __init__(
-		self, use_snr=False, base_dir="", format="voxceleb2_SS", spatial_channels=1, batch_size=8,
-		n_fft=510, hop_length=128, num_frames=256, window="hann",
+		self, base_dir="", format="voxceleb2_SS", spatial_channels=1, batch_size=8,
+		n_fft=510, hop_length=128, num_frames=256, window="hann", use_snr=True,
 		num_workers=8, dummy=False, spec_factor=0.15, spec_abs_exponent=0.5, noise_weight=0.5,
-		gpu=True, return_time=False, **kwargs
+		gpu=True, return_time=False, audioset_dir=None, **kwargs
 	):
 		super().__init__()
 		self.base_dir = base_dir
@@ -401,7 +388,7 @@ class SpecsDataModule(pl.LightningDataModule):
 		self.gpu = gpu
 		self.return_time = return_time
 		self.use_snr = use_snr
-		#("In specsDataModule.__init__, use_sync_enc=", use_snr)
+		self.audioset_dir = audioset_dir
 		self.kwargs = kwargs
 
 	def setup(self, stage=None):
@@ -410,15 +397,15 @@ class SpecsDataModule(pl.LightningDataModule):
 			**self.stft_kwargs, **self.kwargs
 		)
 		if stage == 'fit' or stage is None:
-			self.train_set = Specs(self.base_dir, 'train', self.dummy, True, 
-				format=self.format, spatial_channels=self.spatial_channels, 
+			self.train_set = Specs(self.base_dir, 'train', self.dummy, self.format,
+				spatial_channels=self.spatial_channels, audioset_dir=self.audioset_dir,
 				return_time=self.return_time, use_snr=self.use_snr, noise_weight=self.noise_weight, **specs_kwargs)
-			self.valid_set = Specs(self.base_dir, 'valid', self.dummy, False, 
-				format=self.format, spatial_channels=self.spatial_channels, 
+			self.valid_set = Specs(self.base_dir, 'valid', self.dummy, self.format,
+				spatial_channels=self.spatial_channels, audioset_dir=self.audioset_dir,
 				return_time=self.return_time, use_snr=self.use_snr, noise_weight=self.noise_weight, **specs_kwargs)
 		if stage == 'test' or stage is None:
-			self.test_set = Specs(self.base_dir, 'test', self.dummy, False, 
-				format=self.format, spatial_channels=self.spatial_channels, 
+			self.test_set = Specs(self.base_dir, 'test', self.dummy, self.format, 
+				spatial_channels=self.spatial_channels, audioset_dir=self.audioset_dir,
 				return_time=self.return_time, use_snr=self.use_snr, noise_weight=self.noise_weight, **specs_kwargs)
 
 	def spec_fwd(self, spec):
@@ -468,9 +455,8 @@ class SpecsDataModule(pl.LightningDataModule):
 	def add_argparse_args(parser):
 		parser.add_argument("--format", type=str, default="voxceleb2_SS", choices=['voxceleb2_SS', 'voxceleb2_SE', 'voxceleb2_SES'], help="File paths follow the DNS data description.")
 		parser.add_argument("--noise_weight", type=float, default=0.5, help='weight of background noise. only used for voxceleb2_SES')
-		parser.add_argument("--base_dir", type=str, default="/mnt/scratch/datasets/new_avspeech", #"/mnt/scratch/datasets/new_avspeech" , "/mnt/work2/users/cyong/storm/new_avspeech"
-			help="The base directory of the dataset. Should contain `train`, `valid` and `test` subdirectories, "
-				"each of which contain `clean` and `noisy` subdirectories.")
+		parser.add_argument("--base_dir", type=str, required=True,
+			help="The base directory of the VoxCeleb2 dataset. Should contain `dev` and `test` subdirectories.")
 		parser.add_argument("--use_snr", action="store_true", help="Enable this option to mix the audio with a SNR range of [-6, 12].") 
 		parser.add_argument("--batch_size", type=int, default=4, help="The batch size. 4 by default.")
 		parser.add_argument("--n_fft", type=int, default=510, help="Number of FFT bins. 510 by default.")   # to assure 256 freq bins
@@ -483,30 +469,27 @@ class SpecsDataModule(pl.LightningDataModule):
 		parser.add_argument("--spec_abs_exponent", type=float, default=0.5,
 			help="Exponent e for the transformation abs(z)**e * exp(1j*angle(z)). "
 				"1 by default; set to values < 1 to bring out quieter features.")
-		parser.add_argument("—return_time", action="store_true", help="Return the waveform instead of the STFT")
-		
+		parser.add_argument("—-return_time", action="store_true", help="Return the waveform instead of the STFT")
+		parser.add_argument("--audioset_dir", type=str, default=None, help="AudioSet directory. Required for SE/SES training.")
 		
 		return parser
 
 	def train_dataloader(self):
-		# return DataLoader(
 		return DataLoader(
 			self.train_set, batch_size=self.batch_size,
-			num_workers=self.num_workers, pin_memory=self.gpu, shuffle=True # pin_memory=self.gpu
+			num_workers=self.num_workers, pin_memory=self.gpu, shuffle=True,
 		)
 		
 	def val_dataloader(self):
-		# return DataLoader(
 		return DataLoader(
 			self.valid_set, batch_size=self.batch_size,
-			num_workers=self.num_workers, pin_memory=self.gpu, shuffle=False # pin_memory=self.gpu
+			num_workers=self.num_workers, pin_memory=self.gpu, shuffle=False,
 		)
 
 	def test_dataloader(self):
-		# return DataLoader(
 		return DataLoader(
 			self.test_set, batch_size=self.batch_size,
-			num_workers=self.num_workers, pin_memory=self.gpu, shuffle=False # pin_memory=self.gpu
+			num_workers=self.num_workers, pin_memory=self.gpu, shuffle=False,
 		)
 
 

@@ -12,7 +12,7 @@ Our demo page is [here](https://mmai.io/projects/avdiffuss/).
 ## Installation
 
 - Create a new virtual environment with the following command. You should change the environment path in yaml file.
-- `conda create -n AVDiffuSS python=3.8`
+- `conda create -n avdiffuss python=3.8`
 - `pip install -r requirements.txt`
 
 ## Pre-trained checkpoints
@@ -26,7 +26,7 @@ Usage:
 
 For training, run
 ```bash
-python train.py 
+python train.py --base_dir /path/to/voxceleb2/dir --n_gpus NUM_GPUS
 ```
 It you don't want to save checkpoints, add --nolog option.
 
@@ -60,10 +60,10 @@ Since our model is based on a Diffusion method, an inference speech would be slo
 Our paper has been submitted to a conference and is currently under review. Therefore the appropriate citation for our paper may change in the future.
 
 ```
-@article{lee2023seeing,
+@inproceedings{lee2024seeing,
   title={Seeing Through the Conversation: Audio-Visual Speech Separation based on Diffusion Model},
   author={Lee, Suyeon and Jung, Chaeyoung and Jang, Youngjoon and Kim, Jaehun and Chung, Joon Son},
-  journal={arXiv preprint arXiv:2310.19581},
-  year={2023}
+  booktitle={Proceedings of IEEE International Conference on Acoustics, Speech and Signal Processing},
+  year={2024}
 }
 ```
